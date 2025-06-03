@@ -1,8 +1,11 @@
 def generate_custom_id(prefix, model_class):
-    last_instance = model_class.objects.order_by('-id').first()
-    if not last_instance or not hasattr(last_instance, 'custom_id'):
-        return f"{prefix}-001"
-
-    last_id = last_instance.custom_id.split("-")[-1]
-    new_id = int(last_id) + 1
-    return f"{prefix}-{new_id:03d}"
+    objs = model_class.objects.filter(custom_id__startswith=prefix)
+    ids = []
+    for obj in objs:
+        try:
+            num = int(obj.custom_id.split('-')[1])
+            ids.append(num)
+        except (IndexError, ValueError):
+            continue
+    next_num = max(ids) + 1 if ids else 1
+    return f"{prefix}-{next_num:03d}"

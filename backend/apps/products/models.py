@@ -3,7 +3,7 @@ from apps.common.models import AbstractBaseModel
 from apps.common.utils import generate_custom_id
 
 class Product(AbstractBaseModel):
-    product_id = models.CharField(max_length=20, unique=True, blank=True)
+    CUSTOM_ID_PREFIX = 'PRD'
     name = models.CharField(max_length=255)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)

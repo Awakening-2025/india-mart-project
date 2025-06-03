@@ -4,7 +4,7 @@ from apps.common.utils import generate_custom_id
 from apps.products.models import Product
 from apps.users.models import User
 class Order(AbstractBaseModel):
-    order_id = models.CharField(max_length=20, unique=True, blank=True)
+    CUSTOM_ID_PREFIX = 'ORD'
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()

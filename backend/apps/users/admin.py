@@ -14,6 +14,5 @@ class CustomUserAdmin(BaseUserAdmin):
         ('Tracking', {'fields': ('created_by', 'updated_by')}),
     )
     search_fields = ('username', 'email', 'phone_number')
-    ordering = ('id',)
 
 admin.site.register(User, CustomUserAdmin)

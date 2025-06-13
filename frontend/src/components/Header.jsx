@@ -1,11 +1,12 @@
 import React from 'react';
 import { Search, ShoppingCart, User, MapPin, Phone, Mail } from 'lucide-react';
 
-const Header = ({ cartItemsCount, onSignInClick }) => {
+// We pass isSticky, topBarRef, and mainHeaderRef as props from App.jsx
+const Header = ({ cartItemsCount, onSignInClick, isSticky, topBarRef, mainHeaderRef }) => {
   return (
     <>
-      {/* Top Bar */}
-      <div className="bg-gray-800 text-white py-2">
+      {/* Top Bar - We attach a ref to it to measure its height */}
+      <div ref={topBarRef} className="bg-gray-800 text-white py-2">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center text-sm">
             <div className="flex items-center space-x-6">
@@ -20,14 +21,17 @@ const Header = ({ cartItemsCount, onSignInClick }) => {
             </div>
             <div className="flex items-center space-x-4">
               <span>Welcome to Awakening Coins</span>
-              <button className="hover:text-blue-300 transition-colors">Sell on TradeHub</button>
+              <button className="hover:text-blue-300 transition-colors">Sell on Awakening Coins</button>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Main Header */}
-      <header className="bg-white shadow-lg border-b-2 border-blue-600">
+      {/* Main Header - We attach a ref and conditionally add the 'sticky-header' class */}
+      <header
+        ref={mainHeaderRef}
+        className={`bg-white shadow-lg border-b-2 border-blue-600 transition-all duration-300 ${isSticky ? 'sticky-header' : ''}`}
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-4">
             {/* Logo */}

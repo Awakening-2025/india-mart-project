@@ -12,11 +12,11 @@ const Footer = () => {
             <div className="flex items-center mb-4">
               <div className="bg-blue-600 text-white p-2 rounded-lg">
                 <div className="w-8 h-8 flex items-center justify-center font-bold text-lg">
-                  TH
+                  AC
                 </div>
               </div>
               <div className="ml-3">
-                <h3 className="text-xl font-bold">TradeHub</h3>
+                <h3 className="text-xl font-bold">Awakening Coins</h3>
                 <p className="text-sm text-gray-400">B2B Marketplace</p>
               </div>
             </div>
@@ -77,7 +77,7 @@ const Footer = () => {
                 <p className="text-gray-400 text-sm">support@tradehub.com</p>
               </div>
             </div>
-            
+
             {/* Newsletter */}
             <div className="mt-6">
               <h5 className="font-medium mb-2">Subscribe to Newsletter</h5>

@@ -43,7 +43,22 @@ export const productService = {
     }
 };
 
+// --- NEW CART SERVICE ---
+export const cartService = {
+    getCart: () => api.get(API_ENDPOINTS.SALES.GET_CART),
+    addToCart: (productId, quantity) => api.post(API_ENDPOINTS.SALES.ADD_TO_CART, { product_id: productId, quantity }),
+    removeFromCart: (itemId) => api.delete(API_ENDPOINTS.SALES.REMOVE_FROM_CART(itemId)),
+    // updateCartItem function can be added here as well
+};
 // --- Category Service ---
 export const categoryService = {
     getCategories: () => api.get(API_ENDPOINTS.SHOP.GET_CATEGORIES),
+};
+
+export const orderService = {
+    // This function will trigger the checkout process on the backend
+    createOrder: () => api.post(API_ENDPOINTS.SALES.CREATE_ORDER),
+
+    // This function will fetch the user's order history
+    getMyOrders: () => api.get(API_ENDPOINTS.SALES.GET_ORDERS),
 };

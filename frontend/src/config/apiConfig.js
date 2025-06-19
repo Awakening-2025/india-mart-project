@@ -13,19 +13,26 @@ export const API_ENDPOINTS = {
 
     // --- Shop/Product Endpoints ---
     SHOP: {
-        // Categories
         GET_CATEGORIES: `${API_BASE_URL}/shop/categories/`,
-
-        // Products
         GET_PRODUCTS: `${API_BASE_URL}/shop/products/`,
-        CREATE_PRODUCT: `${API_BASE_URL}/shop/products/`, // Same as GET_PRODUCTS for POST
+        CREATE_PRODUCT: `${API_BASE_URL}/shop/products/`,
         GET_PRODUCT_DETAIL: (productId) => `${API_BASE_URL}/shop/products/${productId}/`,
         UPDATE_PRODUCT: (productId) => `${API_BASE_URL}/shop/products/${productId}/`,
         DELETE_PRODUCT: (productId) => `${API_BASE_URL}/shop/products/${productId}/`,
-
-        // Custom endpoint for fetching only the logged-in seller's products
-        GET_MY_PRODUCTS: `${API_BASE_URL}/shop/products/my-products/`, // <-- NEW
+        GET_MY_PRODUCTS: `${API_BASE_URL}/shop/products/my-products/`,
     },
 
-    // ... other endpoints ...
+    // --- SALES (CART & ORDER) ENDPOINTS (THIS WAS MISSING/INCOMPLETE) ---
+    SALES: {
+        // Cart Endpoints
+        GET_CART: `${API_BASE_URL}/sales/cart/`,
+        ADD_TO_CART: `${API_BASE_URL}/sales/cart/add-item/`,
+        UPDATE_CART_ITEM: (itemId) => `${API_BASE_URL}/sales/cart/update-item/${itemId}/`,
+        REMOVE_FROM_CART: (itemId) => `${API_BASE_URL}/sales/cart/remove-item/${itemId}/`,
+
+        // Order Endpoints
+        GET_ORDERS: `${API_BASE_URL}/sales/orders/`,
+        CREATE_ORDER: `${API_BASE_URL}/sales/orders/`,
+        GET_ORDER_DETAIL: (orderId) => `${API_BASE_URL}/sales/orders/${orderId}/`,
+    },
 };

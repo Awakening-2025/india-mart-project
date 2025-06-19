@@ -1,56 +1,83 @@
 // src/context/CartContext.jsx
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import { cartService } from '../services/apiService';
+import { useAuth } from './AuthContext';
 import { useToast } from './ToastContext';
 
-// 1. Create the context
 const CartContext = createContext();
-
-// 2. Create a custom hook for easy access
 export const useCart = () => useContext(CartContext);
 
-// 3. Create the Provider component that will manage the state
 export const CartProvider = ({ children }) => {
-    const [cartItems, setCartItems] = useState([]);
+    const [cart, setCart] = useState(null); // Will hold the entire cart object from backend
+    const [loading, setLoading] = useState(false);
+    const { isAuthenticated } = useAuth();
     const { showToast } = useToast();
 
-    // Function to add a product to the cart
-    const addToCart = (productToAdd) => {
-        setCartItems(prevItems => {
-            const existingItem = prevItems.find(item => item.id === productToAdd.id);
+    const fetchCart = useCallback(async () => {
+        if (!isAuthenticated) {
+            setCart(null); // Clear cart if user logs out
+            return;
+        }
+        setLoading(true);
+        try {
+            const response = await cartService.getCart();
+            setCart(response.data);
+        } catch (error) {
+            console.error("Failed to fetch cart", error);
+            // Don't show toast on initial load failure
+        } finally {
+            setLoading(false);
+        }
+    }, [isAuthenticated]);
 
-            if (existingItem) {
-                // If item already exists, just increase its quantity
-                return prevItems.map(item =>
-                    item.id === productToAdd.id
-                        ? { ...item, quantity: item.quantity + 1 }
-                        : item
-                );
-            }
-            // If it's a new item, add it to the cart with quantity 1
-            return [...prevItems, { ...productToAdd, quantity: 1 }];
-        });
-        showToast(`'${productToAdd.name}' added to cart!`, 'success');
+    // Fetch cart when user logs in or on initial app load
+    useEffect(() => {
+        fetchCart();
+    }, [fetchCart]);
+
+    const addToCart = async (product) => {
+        if (!isAuthenticated) {
+            showToast('Please log in to add items to your cart.', 'info');
+            // Here you could trigger the login modal
+            return;
+        }
+        try {
+            const response = await cartService.addToCart(product.id, 1);
+            setCart(response.data); // Update cart state with response from backend
+            showToast(`'${product.name}' added to cart!`, 'success');
+        } catch (error) {
+            showToast('Could not add item to cart.', 'error');
+        }
     };
 
-    // Function to remove an item completely from the cart
-    const removeFromCart = (productId) => {
-        setCartItems(prevItems => prevItems.filter(item => item.id !== productId));
-        showToast('Item removed from cart.', 'info');
+    const removeFromCart = async (itemId) => {
+        try {
+            await cartService.removeFromCart(itemId);
+            showToast('Item removed from cart.', 'info');
+            fetchCart(); // Re-fetch the cart to update the state
+        } catch (error) {
+            showToast('Could not remove item from cart.', 'error');
+        }
     };
 
-    // Function to get the total number of items (for the header badge)
     const getTotalItems = () => {
-        return cartItems.reduce((total, item) => total + item.quantity, 0);
+        if (!cart || !cart.items) return 0;
+        return cart.items.reduce((total, item) => total + item.quantity, 0);
     };
 
-    // Function to calculate the total price of the cart
     const getCartTotal = () => {
-        return cartItems.reduce((total, item) => total + (item.sale_price || item.price) * item.quantity, 0);
+        if (!cart || !cart.items) return 0;
+        return cart.items.reduce((total, item) => {
+            const price = parseFloat(item.product.sale_price || item.product.price);
+            return total + price * item.quantity;
+        }, 0);
     };
 
-    // The value that will be available to all children components
     const value = {
-        cartItems,
+        cart,
+        cartItems: cart?.items || [],
+        loading,
+        fetchCart,
         addToCart,
         removeFromCart,
         getTotalItems,

@@ -16,6 +16,7 @@ import SellerDashboard from './pages/SellerDashboard';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
 import CartPage from './pages/CartPage';
+import MyOrdersPage from './pages/MyOrdersPage';
 // import EditProductPage from './pages/EditProductPage'; // Future page
 
 function App() {
@@ -63,6 +64,14 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route
+              path="/my-orders"
+              element={
+                <PrivateRoute roles={['buyer', 'seller']}> {/* Both can have orders */}
+                  <MyOrdersPage />
+                </PrivateRoute>
+              }
+            />
 
 
             {/* You can add more routes for buyers or general users here */}
@@ -86,7 +95,7 @@ function App() {
         {/* ToasterContainer is a global utility that sits on top of everything */}
         <ToasterContainer />
       </div>
-    </Router>
+    </Router >
   );
 }
 

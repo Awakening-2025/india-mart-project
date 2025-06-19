@@ -3,7 +3,7 @@
 from rest_framework import serializers
 from .models import Category, Product, Review
 from apps.users.serializers import UserSerializer  # Assuming this path is correct
-
+from apps.users.serializers import UserSerializer
 # ===============================================
 #  CATEGORY AND REVIEW SERIALIZERS (READ-ONLY)
 # ===============================================
@@ -100,6 +100,9 @@ class ProductDetailSerializer(serializers.ModelSerializer):
     review_count = serializers.IntegerField(read_only=True)
     discount_percent = serializers.IntegerField(read_only=True)
 
+    created_by = UserSerializer(read_only=True)
+    updated_by = UserSerializer(read_only=True)
+
     class Meta:
         model = Product
         # All fields from the model are included for a detailed view.
@@ -119,5 +122,7 @@ class ProductDetailSerializer(serializers.ModelSerializer):
             'review_count',
             'reviews',
             'created_at',
-            'updated_at'
+            'updated_at',
+            'created_by',
+            'updated_by',
         ]

@@ -73,7 +73,15 @@ class ProductViewSet(viewsets.ModelViewSet):
         """
         Automatically set the 'seller' field to the currently logged-in user.
         """
-        serializer.save(seller=self.request.user,is_active=True)
+        serializer.save(seller=self.request.user,is_active=True,created_by=self.request.user,updated_by=self.request.user)
+
+
+    def perform_update(self, serializer):
+        """
+        Automatically set the 'updated_by' field to the currently logged-in user.
+        """
+        serializer.save(updated_by=self.request.user)
+
 
     # --- NEW CUSTOM ACTION for /my-products/ ---
     @action(detail=False, methods=['GET'], url_path='my-products')

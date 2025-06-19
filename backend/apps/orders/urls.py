@@ -1,23 +1,10 @@
-# apps/orders/urls.py
-from django.urls import path, include
-from rest_framework.routers import DefaultRouter
-from .views import CartItemViewSet, OrderViewSet
+# backend/apps/orders/urls.py
 
-# Hum yahan Cart ke liye alag se endpoint nahi bana rahe hain kyunki
-# cart user se juda hota hai aur hum items ke through usse manage kar sakte hain.
-# Ek custom endpoint '/cart/' banaya ja sakta hai agar zaroorat ho.
+from rest_framework.routers import DefaultRouter
+from .views import CartViewSet, OrderViewSet # Import CartViewSet
 
 router = DefaultRouter()
-# 'cart-items' ko 'cart/items/' mein badalna zyada intuitive hai.
-router.register(r'cart/items', CartItemViewSet, basename='cartitem')
+router.register(r'cart', CartViewSet, basename='cart') # Register cart endpoint
 router.register(r'orders', OrderViewSet, basename='order')
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
-
-# Generated URLs will be like:
-# /cart/items/
-# /cart/items/{id}/
-# /orders/
-# /orders/{id}/
+urlpatterns = router.urls

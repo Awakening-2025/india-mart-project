@@ -1,26 +1,37 @@
-"""
-URL configuration for ecommerce_api project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.2/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
+# ecommerce_api/urls.py
 
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
-urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('api/users/', include('apps.users.urls')),
-    path('api/products/', include('apps.products.urls')),
-    path('api/orders/', include('apps.orders.urls')),
+# API URL patterns
+# Hum saare API endpoints ko /api/v1/ prefix ke neeche rakhenge.
+api_urlpatterns = [
+    # Authentication related URLs (login, signup, etc.)
+    # URL: /api/v1/auth/...
+    path('auth/', include('apps.users.urls')),
+
+    # Product and category related URLs
+    # URL: /api/v1/shop/...
+    path('shop/', include('apps.products.urls')),
+
+    # Order and cart related URLs
+    # URL: /api/v1/sales/...
+    path('sales/', include('apps.orders.urls')),
 ]
+
+# Main URL patterns for the whole project
+urlpatterns = [
+    # Django Admin Panel
+    path('admin/', admin.site.urls),
+
+    # All API endpoints will be under /api/v1/
+    path('api/v1/', include(api_urlpatterns)),
+
+    # Add other top-level URLs here if needed
+]
+
+# Ye development ke time media files (jaise product images) ko serve karne ke liye zaroori hai.
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

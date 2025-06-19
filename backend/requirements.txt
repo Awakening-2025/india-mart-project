@@ -4,9 +4,11 @@ click==8.2.1
 colorama==0.4.6
 Django==5.2.1
 django-cors-headers==4.7.0
+django-filter==25.1
 django-role-permissions==3.2.0
 djangorestframework==3.16.0
 djangorestframework_simplejwt==5.5.0
+drf-nested-routers==0.94.2
 flake8==7.2.0
 isort==6.0.1
 mccabe==0.7.0

@@ -2,7 +2,8 @@
 
 import React from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useToast } from '../context/ToastContext';
+// 1. Correct the import path for useToast
+import { useToast } from '../../context/ToastContext'; // Corrected path
 import { CheckCircle, XCircle, AlertTriangle, Info, X } from 'lucide-react';
 
 // Configuration for different toast types
@@ -14,13 +15,15 @@ const toastConfig = {
 };
 
 // Single Toast Item Component (Internal)
+// NOTE: `toast` prop ke andar `removeToast` function nahi hai,
+//       isliye use `useToast()` hook se get karna sahi hai.
 const ToastMessage = ({ toast }) => {
     const { removeToast } = useToast();
     const { Icon, barColor, textColor, bgColor } = toastConfig[toast.type] || toastConfig.info;
 
     return (
         <motion.div
-            layout // Helps in smooth re-ordering if a toast is removed from the middle
+            layout
             initial={{ opacity: 0, y: 50, scale: 0.3 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5, transition: { duration: 0.2 } }}

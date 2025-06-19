@@ -6,7 +6,7 @@ export const useCart = () => {
   const addToCart = (product, quantity = 1) => {
     setCartItems(prevItems => {
       const existingItem = prevItems.find(item => item.product.id === product.id);
-      
+
       if (existingItem) {
         return prevItems.map(item =>
           item.product.id === product.id
@@ -14,7 +14,7 @@ export const useCart = () => {
             : item
         );
       }
-      
+
       return [...prevItems, { product, quantity }];
     });
   };
@@ -28,7 +28,7 @@ export const useCart = () => {
       removeFromCart(productId);
       return;
     }
-    
+
     setCartItems(prevItems =>
       prevItems.map(item =>
         item.product.id === productId

@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Product
+from .models import Category, Product, Review
 
-@admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
-    list_display = ('custom_id', 'name', 'price', 'stock', 'created_at', 'created_by')
+admin.site.register(Category)
+admin.site.register(Product)
+admin.site.register(Review)

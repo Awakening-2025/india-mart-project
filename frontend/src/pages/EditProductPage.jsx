@@ -41,7 +41,7 @@ const EditProductPage = () => {
                 category: productData.category.id, // Set the category ID
             });
             setExistingImageUrl(productData.image); // Store existing image URL
-            setCategories(categoriesRes.data);
+            setCategories(categoriesRes.data.results || []);
         } catch (error) {
             showToast('Failed to load product data', 'error');
             navigate('/seller/dashboard');

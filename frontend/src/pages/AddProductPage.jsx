@@ -18,7 +18,7 @@ const AddProductPage = () => {
         const fetchCategories = async () => {
             try {
                 const response = await categoryService.getCategories();
-                setCategories(response.data);
+                setCategories(response.data.results || [])
             } catch (error) { showToast('Failed to load categories', 'error'); }
         };
         fetchCategories();

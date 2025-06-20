@@ -3,13 +3,26 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Star, MapPin, ShoppingCart, Heart } from 'lucide-react';
-
+import { useWishlist } from '../context/WishlistContext';
 // Import the useCart hook to access cart functions
 import { useCart } from '../context/CartContext';
 
 const ProductCard = ({ product }) => {
   // Get the addToCart function from our context
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isProductInWishlist, getItemIdByProductId } = useWishlist();
+  const inWishlist = isProductInWishlist(product.id);
+
+  const handleWishlistToggle = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (inWishlist) {
+      const itemId = getItemIdByProductId(product.id);
+      if (itemId) removeFromWishlist(itemId);
+    } else {
+      addToWishlist(product.id);
+    }
+  };
 
   // Determine if the product is in stock based on the 'stock' quantity from the API
   const isInStock = product.stock > 0;
@@ -42,11 +55,8 @@ const ProductCard = ({ product }) => {
             {discountPercentage}% OFF
           </div>
         )}
-        <button
-          onClick={(e) => { e.preventDefault(); /* Add to wishlist logic */ }}
-          className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:bg-gray-100"
-        >
-          <Heart className="w-4 h-4 text-gray-600" />
+        <button onClick={handleWishlistToggle} className="...">
+          <Heart className={`w-4 h-4 transition-colors ${inWishlist ? 'text-red-500 fill-current' : 'text-gray-600'}`} />
         </button>
       </div>
 

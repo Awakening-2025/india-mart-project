@@ -14,6 +14,7 @@ import AuthForm from './auth/AuthForm';
 const Header = () => {
   // --- CONTEXT & HOOKS ---
   const { user, isAuthenticated, logout } = useAuth();
+  const [searchTerm, setSearchTerm] = useState('');
   const { getTotalItems } = useCart(); // Get getTotalItems from CartContext
   const navigate = useNavigate();
 
@@ -54,6 +55,20 @@ const Header = () => {
     navigate('/');
   };
 
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchTerm.trim()) {
+      // Navigate to the home page (or a dedicated search page) with the search query
+      // This will trigger the useEffect in HomePage to re-fetch products
+      navigate(`/?search=${encodeURIComponent(searchTerm)}`);
+    } else {
+      // If search is empty, go to home page without search query
+      navigate('/');
+    }
+  };
+
+
   const closeAuthModal = () => setIsAuthFormOpen(false);
 
   return (
@@ -86,11 +101,19 @@ const Header = () => {
                 <div className="ml-3"><h1 className="text-2xl font-bold text-gray-900">Awakening Coins</h1><p className="text-sm text-gray-600">B2B Marketplace</p></div>
               </Link>
               <div className="flex-1 max-w-2xl mx-8">
-                <div className="relative">
-                  <input type="text" placeholder="Search products, suppliers, categories..." className="w-full px-4 py-3 pl-12 pr-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all" />
-                  <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">Search</button>
-                </div>
+                <form onSubmit={handleSearchSubmit} className="relative">
+                  <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    placeholder="Search products, suppliers, categories..."
+                    className="w-full px-4 py-3 pl-12 pr-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all"
+                  />
+                  {/* ... (Search Icon) ... */}
+                  <button type="submit" className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition-colors">
+                    Search
+                  </button>
+                </form>
               </div>
 
               <div className="flex items-center space-x-6">
@@ -100,8 +123,11 @@ const Header = () => {
                     {user?.role === 'seller' && (
                       <Link to="/seller/dashboard" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600" title="My Products"><Package className="w-6 h-6" /></Link>
                     )}
-                    <div className="flex items-center space-x-2"><User className="w-6 h-6 text-blue-600" /><span>Hi, {user?.first_name || user?.username}</span></div>
-                    <button onClick={handleLogout} className="text-red-500 hover:text-red-700" title="Logout"><LogOut /></button>
+                    <Link to="/profile" className="flex items-center space-x-2 text-gray-600 hover:text-blue-600">
+                      <User className="w-6 h-6 text-blue-600" />
+                      <span>Hi, {user?.first_name || user?.username}</span>
+                    </Link>
+                    <button onClick={handleLogout}><LogOut /></button>
                   </>
                 ) : (
                   <button onClick={handleOpenLoginModal} className="flex items-center space-x-2 text-gray-600 hover:text-blue-600"><User className="w-6 h-6" /><span>Sign In</span></button>

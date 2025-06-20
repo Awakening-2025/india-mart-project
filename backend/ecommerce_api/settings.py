@@ -32,7 +32,10 @@ ALLOWED_HOSTS = []
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Aapka Vite React frontend
     "http://127.0.0.1:5173",
+    "http://192.168.1.4:3000",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 INSTALLED_APPS = [
@@ -50,7 +53,9 @@ INSTALLED_APPS = [
     "apps.products",
     "apps.orders",
     "apps.users",
-    "apps.common",  # Common app for shared models like BaseModel
+    "apps.common",
+    "apps.seller",  
+    "apps.wishlist",
 ]
 
 MIDDLEWARE = [
@@ -66,6 +71,8 @@ MIDDLEWARE = [
 
 
 REST_FRAMEWORK={
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 12,
     'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
     'DEFAULT_AUTHENTICATION_CLASSES':(
         'rest_framework_simplejwt.authentication.JWTAuthentication',

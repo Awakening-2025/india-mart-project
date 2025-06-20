@@ -19,6 +19,8 @@ api_urlpatterns = [
     # Order and cart related URLs
     # URL: /api/v1/sales/...
     path('sales/', include('apps.orders.urls')),
+    path('seller/', include('apps.seller.urls')),
+    path('wishlist/', include('apps.wishlist.urls')),
 ]
 
 # Main URL patterns for the whole project

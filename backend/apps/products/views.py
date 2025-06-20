@@ -13,7 +13,9 @@ from .serializers import (
     ReviewSerializer
 )
 from ecommerce_api.permissions import IsSeller, IsOwnerOrReadOnly, IsBuyer # Assuming this path is correct
-
+from rest_framework.filters import SearchFilter, OrderingFilter
+from django_filters.rest_framework import DjangoFilterBackend
+from .filters import ProductFilter # Apni nayi filter class ko import karein
 # ===============================================
 #  CATEGORY VIEWSET
 # ===============================================
@@ -37,11 +39,17 @@ class ProductViewSet(viewsets.ModelViewSet):
     Manages different serializers and permissions based on the request action.
     """
     queryset = Product.objects.filter(is_active=True).select_related('category', 'seller')
+    
+    filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
+    filterset_class = ProductFilter 
+    search_fields = ['name', 'description', 'category__name', 'seller__username']
+    
+    ordering_fields = ['price', 'created_at', 'name']
+    ordering = ['-created_at']
     filterset_fields = {
         'category__name': ['exact'],
         'price': ['gte', 'lte']  
     }
-    search_fields = ['name', 'description', 'category__name']
 
     def get_serializer_class(self):
         """

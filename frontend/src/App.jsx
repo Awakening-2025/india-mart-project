@@ -17,6 +17,9 @@ import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
 import CartPage from './pages/CartPage';
 import MyOrdersPage from './pages/MyOrdersPage';
+import ProfilePage from './pages/ProfilePage';
+import SellerOrderManagement from './pages/SellerOrderManagement';
+import WishlistPage from './pages/WishlistPage';
 // import EditProductPage from './pages/EditProductPage'; // Future page
 
 function App() {
@@ -72,7 +75,23 @@ function App() {
                 </PrivateRoute>
               }
             />
-
+            <Route
+              path="/profile"
+              element={
+                <PrivateRoute> {/* No roles needed, just needs to be authenticated */}
+                  <ProfilePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/seller/orders"
+              element={
+                <PrivateRoute roles={['seller']}>
+                  <SellerOrderManagement />
+                </PrivateRoute>
+              }
+            />
+            <Route path="/wishlist" element={<PrivateRoute><WishlistPage /></PrivateRoute>} />
 
             {/* You can add more routes for buyers or general users here */}
             {/* 

@@ -18,6 +18,14 @@ export const AuthProvider = ({ children }) => {
         setLoading(false);
     }, [token]);
 
+
+
+    const updateUserContext = (newUserData) => {
+        setUser(newUserData);
+        localStorage.setItem('user', JSON.stringify(newUserData));
+    };
+
+
     const login = async (credentials) => {
         const response = await authService.login(credentials);
         const { access, refresh, user: userData } = response.data;
@@ -65,6 +73,7 @@ export const AuthProvider = ({ children }) => {
         login,
         signup,
         logout,
+        updateUserContext,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
